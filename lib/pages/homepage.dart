@@ -1,18 +1,20 @@
 import 'package:cozy_house/models/city.dart';
 import 'package:cozy_house/models/space.dart';
 import 'package:cozy_house/models/tips.dart';
+import 'package:cozy_house/providers/spaceprovider.dart';
 import 'package:cozy_house/theme.dart';
 import 'package:cozy_house/widgets/buttonnavbaritem.dart';
 import 'package:cozy_house/widgets/citycard.dart';
 import 'package:cozy_house/widgets/spacecard.dart';
 import 'package:cozy_house/widgets/tipscard.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
-
   @override
   Widget build(BuildContext context) {
+    var spaceProvider = Provider.of<SpaceProvider>(context);
+
     return Scaffold(
       backgroundColor: WhiteColor,
       body: SafeArea(
@@ -81,6 +83,31 @@ class HomePage extends StatelessWidget {
                     ),
                   ),
                   SizedBox(width: 24),
+                  CityCard(
+                    City(
+                      id: 4,
+                      name: 'Palembang',
+                      imageUrl: 'assets/images/city_4.png',
+                    ),
+                  ),
+                  SizedBox(width: 24),
+                  CityCard(
+                    City(
+                      id: 5,
+                      name: 'Aceh',
+                      imageUrl: 'assets/images/city_5.png',
+                      isPopular: true,
+                    ),
+                  ),
+                  SizedBox(width: 24),
+                  CityCard(
+                    City(
+                      id: 6,
+                      name: 'Bogor',
+                      imageUrl: 'assets/images/city_6.png',
+                    ),
+                  ),
+                  SizedBox(width: 24),
                 ],
               ),
             ),
@@ -98,44 +125,34 @@ class HomePage extends StatelessWidget {
             SizedBox(height: 16),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: edge),
-              child: Column(
-                children: [
-                  SpaceCard(
-                    Space(
-                      1,
-                      'Kuretakeso Hott',
-                      'assets/images/space_1.png',
-                      52,
-                      'Bandung',
-                      'Germany',
-                      4,
-                    ),
-                  ),
-                  SizedBox(height: 30),
-                  SpaceCard(
-                    Space(
-                      2,
-                      'Roemah Nenek',
-                      'assets/images/space_2.png',
-                      52,
-                      'Seattle',
-                      'Bogor',
-                      5,
-                    ),
-                  ),
-                  SizedBox(height: 30),
-                  SpaceCard(
-                    Space(
-                      3,
-                      'Darrling How',
-                      'assets/images/space_3.png',
-                      52,
-                      'Jakarta',
-                      'Indonesia',
-                      3,
-                    ),
-                  ),
-                ],
+              child: FutureBuilder(
+                future: spaceProvider.getRecommendedSpace(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    List<Space> data = snapshot.data as List<Space>;
+                    int index = 0;
+                    // GET 3 FIRST ELEMEN
+                    List<Space> limitedData = data.sublist(0, 3);
+                    return Column(
+                      children: [
+                        ...limitedData.map((item) {
+                          // MARGIN INDEX LOOPING
+                          index++;
+                          return Container(
+                            margin: EdgeInsets.only(
+                              top: index == 1 ? 0 : 30,
+                            ),
+                            child: SpaceCard(item),
+                          );
+                        }).toList(),
+                      ],
+                    );
+                  } else {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                },
               ),
             ),
             SizedBox(height: 30),
