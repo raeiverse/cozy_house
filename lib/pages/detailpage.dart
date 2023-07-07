@@ -23,7 +23,7 @@ class _DetailPageState extends State<DetailPage> {
   Widget build(BuildContext context) {
     launchUrl(String url) async {
       if (await canLaunchUrl(Uri.parse(url))) {
-        launchUrl(url);
+        launch(url);
       } else {
         Navigator.push(
           context,
