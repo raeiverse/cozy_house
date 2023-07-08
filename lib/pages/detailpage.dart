@@ -21,9 +21,9 @@ class _DetailPageState extends State<DetailPage> {
   bool isWishlisted = false;
   @override
   Widget build(BuildContext context) {
-    launchUrl(String url) async {
-      if (await canLaunchUrl(Uri.parse(url))) {
-        launch(url);
+    canLaunchUrl(String url) async {
+      if (await canLaunchUrl(url)) {
+        canLaunchUrl(url);
       } else {
         Navigator.push(
           context,
@@ -57,7 +57,7 @@ class _DetailPageState extends State<DetailPage> {
               TextButton(
                 child: const Text('Make a Call'),
                 onPressed: () {
-                  launchUrl('tel://${widget.space.phone}');
+                  launch('tel://${widget.space.phone}');
                 },
               ),
             ],
@@ -251,9 +251,7 @@ class _DetailPageState extends State<DetailPage> {
                             ),
                             InkWell(
                               onTap: () {
-                                launchUrl(
-                                  widget.space.mapUrl,
-                                );
+                                launch(widget.space.mapUrl);
                               },
                               child: Image.asset(
                                 'assets/images/btn_map.png',

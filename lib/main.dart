@@ -1,4 +1,3 @@
-import 'package:cozy_house/pages/homepage.dart';
 import 'package:cozy_house/pages/splashpage.dart';
 import 'package:cozy_house/providers/spaceprovider.dart';
 import 'package:flutter/material.dart';
